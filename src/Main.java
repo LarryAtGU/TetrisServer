@@ -25,15 +25,16 @@ public class Main {
 
                     // Convert JSON to a Java object
                     PureGame pg = gson.fromJson(jsonMessage, PureGame.class);
+                    if(pg !=null) {
+                        Simulation sim = new Simulation(pg.getCells(), pg.getCurrentShape(),pg.getNextShape());
+                        int[] opMoves = sim.getOptimizedMove();
+                        OpMove opMove = new OpMove(opMoves[0],opMoves[1]);
 
-                    Simulation sim = new Simulation(pg.getCells(), pg.getCurrentShape(),pg.getNextShape());
-                    int[] opMoves = sim.getOptimizedMove();
-                    OpMove opMove = new OpMove(opMoves[0],opMoves[1]);
+                        String jsonResponse = gson.toJson(opMove);
 
-                    String jsonResponse = gson.toJson(opMove);
-
-                    // Send the JSON response back to the client
-                    out.println(jsonResponse);
+                        // Send the JSON response back to the client
+                        out.println(jsonResponse);
+                    }
                 }
             }
         } catch (Exception e) {
